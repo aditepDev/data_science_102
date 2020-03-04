@@ -51,6 +51,6 @@ class Train:
 
 if __name__ == '__main__':
     X, z = readdata()
-    training = Train(X, z);
-    # training.train()
+    training = Train(X, z)
+    training.train()
     training.showData()
