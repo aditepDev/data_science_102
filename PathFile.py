@@ -13,8 +13,10 @@ try:
         READFILE_DATA = script_dir + "//Storage//Excel//alldata_dataframe.csv"
         READFILE_PARAMETER = script_dir + '//Storage//Parameter//'
         READFILE_CLUSTER = script_dir + '//Storage/Cluster/'
+        READFILE_IMAGE = script_dir +"//Storage//Image//"
     else:
-        print(platform)
+
+        READFILE_IMAGE = "Storage/Image/"
         READFILE_DATA = "Storage/Excel/alldata_dataframe.csv"
         READFILE_EXCEL = "Storage/Excel/"
         READFILE_EXCEL_DATA = "Storage/Excel/data/"
