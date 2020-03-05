@@ -120,6 +120,27 @@ except IOError as e:
     print(e)
 return model
 ```
+### โหลดข้อมูลจาก DB
+```python
+   if platform == "win32":
+            mariadb_connection = mariadb.connect(host="localhost", user='root', password='1234', database='jobs')
+        else:
+            mariadb_connection = mariadb.connect(host="10.3.33.187", user='root', password='d0aep@ssw0rd',
+                                                 database='test')
+        cursor = mariadb_connection.cursor()
+        cursor.execute("SELECT * FROM scheduled_bigfarm_data_temp")
+        data = pd.DataFrame(cursor)
+        X = pd.DataFrame(data,columns=[2,3,4,5,6,7,8,9,10,11,12,13])
+        X = X[(X[3].astype('int') > 2000) & (X[3].astype('int') < 2600) & (X[9] < 100) & (X[10] < 1000)]
+        X = correcting(X)
+        X.info()
+        X.to_csv(PathFile.READFILE_EXCEL + 'dataframeDB.csv')
+        z = pd.DataFrame(X, columns=[10])
+        X = pd.DataFrame(X,columns=[2,3,4,5,6,7,8,9,11,12,13])
+        z = z.astype('int')
+        X = X.to_numpy().astype('float')
+        return  X,z
+```
 ### โหลดข้อมูลจาก  excel
 ```python
 # path
@@ -149,7 +170,29 @@ def readdata():
     X = X.to_numpy()
     return X, z
 ```
+### โหลดหลายไฟล์แล้วนำมารวมกัน
+```python
+ filename = ['2553','2554','2555','2556','2557','2558','2559','2560','2561','2562']
+        datafram = []
+        for name in filename:
+            print(PathFile.READFILE_EXCEL+ 'rice1-'+name+'.xlsx')
+            data = pd.read_excel(PathFile.READFILE_EXCEL+ 'rice1-'+name+'.xlsx')
+            data = pd.DataFrame(data,columns=[2,6,7,8,9])
+            X = data[(data[2] > 99999) & (data[6] != '-') & (data[7] != '-') & (data[8] != '-') & (data[8] != 0 ) & (data[9] != '-')]
+            datafram.append(X)
+            # X.info()
+        datalist = []
+        for i in range(len(datafram)):
+            datalist.append(datafram[i])
+        X = pd.concat(datalist)
+        X.to_csv(PathFile.READFILE_EXCEL + 'dataframeDoae.csv')
 
+        z = pd.DataFrame(X, columns=[8])
+        X = pd.DataFrame(X, columns=[2,6,7,9])
+        z = z.astype('int')
+        X = X.to_numpy()
+
+```
 
 ### เติมค่าเฉลี่ยเข้าช่องที่ว่าง วิธีแทนค่า Missing Value ด้วยค่าเฉลี่ย (Mean Imputation)
 ```python
@@ -241,6 +284,25 @@ try:
 except Exception as e:
     print(e)
 ```
+### Path File
+```python
+
+import os
+from sys import platform
+try:
+    # Windows
+    if platform == "win32":
+        script_dir = os.path.dirname(__file__)
+        PREDICRFILE = script_dir + "//Storage//Model//"
+    else:
+        READFILE_EXCEL = "Storage/Excel/"
+        READFILE_EXCEL_DATA = "Storage/Excel/data/"
+
+except ImportError as e:
+    print('Error:')
+    raise e
+```
+
 # Clean Data 
 1. Parsing คือ การแจกแจงข้อมูล หรือการใช้หัวข้อของชุดข้อมูล
 2. Correcting คือ การแก้ไขข้อมูลที่ผิดพลาด
