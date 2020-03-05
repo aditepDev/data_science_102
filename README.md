@@ -302,7 +302,11 @@ except ImportError as e:
     print('Error:')
     raise e
 ```
-
+### รับพารามิเตอร์จาก console
+```python
+argumentList = sys.argv
+    predictData(list(map(float, argumentList[1:12])))
+```
 # Clean Data 
 1. Parsing คือ การแจกแจงข้อมูล หรือการใช้หัวข้อของชุดข้อมูล
 2. Correcting คือ การแก้ไขข้อมูลที่ผิดพลาด
